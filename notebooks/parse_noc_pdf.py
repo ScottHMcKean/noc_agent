@@ -51,5 +51,11 @@ df_filt = df[df["h1"].isin(noc_classes)]
 
 # COMMAND ----------
 
-# Export the dataframe
+# Convert the dataframe to a flat file and a Unity Catalog table
 df_filt.to_excel("../data/clean_noc_chunks.xlsx")
+
+
+# COMMAND ----------
+spark.createDataFrame(df_filt).write.mode("overwrite").saveAsTable(
+    "shm.noc_agent.noc_chunks"
+)

@@ -1,5 +1,9 @@
+# Databricks notebook source
+
+# COMMAND ----------
 from src.data import download_statcan_table
 
+# COMMAND ----------
 product_ids = [
     "14100320",  # Average usual hours and wages by selected characteristics, monthly, unadjusted for seasonality
     "14100310",  # Employment by occupation, monthly, seasonally adjusted
