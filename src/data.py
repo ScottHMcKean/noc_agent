@@ -1,10 +1,12 @@
 import requests
-import pandas as pd
 import io
 import zipfile
 import os
 import re
+from pathlib import Path
+from urllib.parse import urlparse, unquote
 
+import pandas as pd
 
 def clean_column_name(name):
     """
@@ -21,6 +23,55 @@ def clean_column_name(name):
     name = re.sub(r"_+", "_", name)
     return name
 
+def download_pdf(url: str, output_dir: str = "data/files", filename: str = None) -> Path:
+    """
+    Download a PDF from a URL and save it to the specified directory.
+    
+    Args:
+        url (str): The URL of the PDF to download
+        output_dir (str): Directory to save the PDF to (default: "data/files")
+        filename (str, optional): Name to save the file as. If None, extracts from URL
+        
+    Returns:
+        Path: Path object pointing to the downloaded file
+        
+    Raises:
+        Exception: If the download fails or if the response isn't a PDF
+    """
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # If no filename provided, extract it from the URL
+    if filename is None:
+        # Get filename from URL and decode any URL encoding
+        filename = unquote(os.path.basename(urlparse(url).path))
+        # If no extension or wrong extension, add .pdf
+        if not filename.lower().endswith('.pdf'):
+            filename += '.pdf'
+    
+    output_path = Path(output_dir) / filename
+    
+    # Download the file
+    print(f"Downloading PDF from {url}...")
+    response = requests.get(url, stream=True)
+    
+    # Check if the request was successful
+    if response.status_code != 200:
+        raise Exception(f"Failed to download PDF: HTTP {response.status_code}")
+    
+    # Check if the content is actually a PDF
+    content_type = response.headers.get('content-type', '').lower()
+    if 'application/pdf' not in content_type and not url.lower().endswith('.pdf'):
+        raise Exception(f"URL does not point to a PDF file. Content-Type: {content_type}")
+    
+    # Save the file
+    with open(output_path, 'wb') as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            if chunk:
+                f.write(chunk)
+    
+    print(f"PDF successfully downloaded to {output_path}")
+    return output_path
 
 def download_statcan_table(product_id, language="en", output_dir="data"):
     """

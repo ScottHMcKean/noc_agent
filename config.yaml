@@ -1,7 +1,18 @@
+data:
+  catalog: shm
+  schema: noc_agent
+  raw_data_volume: raw_data
+  product_tables:
+    "14100320": monthly_hours_and_wages
+    "14100310": monthly_adjusted_employment_by_occupation
+    "14100421": monthly_labour_force_characteristics
+    "14100425": monthly_job_tenure_by_occupation
+  pdfs: 
+    NOC: https://www.statcan.gc.ca/en/12-583-x/12-583-x2021001-eng.pdf
 agent:
   streaming: False
-  experiment_location: /Users/scott.mckean/agent_langgraph
-  uc_model_name: shm.multimodal.agent_langgraph
+  experiment_location: /Users/scott.mckean/noc_agent
+  uc_model_name: shm.multimodal.noc_agent
 model:
   endpoint_name: databricks-meta-llama-3-3-70b-instruct
   parameters:
