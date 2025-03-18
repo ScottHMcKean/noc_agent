@@ -14,13 +14,14 @@ We pull the configuration from the agent configuration. The most important part 
 """
 
 from mlflow.models import ModelConfig
-config = ModelConfig(development_config="../config.yaml")
+
+config = ModelConfig(development_config="../agent/config.yaml")
 
 # data
 data_config = config.get("data")
-catalog = data_config.get("catalog")
-schema = data_config.get("schema")
-raw_chunk_table = 'noc_chunks'
+catalog = data_config.get("uc_catalog")
+schema = data_config.get("uc_schema")
+raw_chunk_table = "noc_chunks"
 
 # retriever
 vs_config = config.get("retriever")
@@ -35,7 +36,8 @@ index_source = vs_config.get("source_table")
 
 # COMMAND ----------
 
-spark.sql(f"""
+spark.sql(
+    f"""
   CREATE OR REPLACE TABLE {catalog}.{schema}.{index_source} AS
   SELECT
     monotonically_increasing_id() AS id,
@@ -62,20 +64,21 @@ spark.sql(f"""
     REGEXP_EXTRACT(h4, '(\\\d+)') AS minor_group,
     REGEXP_EXTRACT(h5, '(\\\d+)') AS unit_group
   FROM {catalog}.{schema}.{raw_chunk_table}
-""")
-
-# COMMAND ----------
-
-display(
-  spark.sql(f"SELECT * FROM {catalog}.{schema}.{index_source} LIMIT 20")
+"""
 )
 
 # COMMAND ----------
 
-spark.sql(f"""
+display(spark.sql(f"SELECT * FROM {catalog}.{schema}.{index_source} LIMIT 20"))
+
+# COMMAND ----------
+
+spark.sql(
+    f"""
     ALTER TABLE {catalog}.{schema}.{index_source}
     SET TBLPROPERTIES (delta.enableChangeDataFeed = true)
-""")
+"""
+)
 
 # COMMAND ----------
 
@@ -97,11 +100,11 @@ except:
         pipeline_type="TRIGGERED",
         primary_key="id",
         embedding_source_column="text_w_headings",
-        embedding_model_endpoint_name="databricks-gte-large-en"
+        embedding_model_endpoint_name="databricks-gte-large-en",
     )
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ## NOC Titles
-# MAGIC We can also do a dead simple vector search for semantic matching on titles. We have a 
+# MAGIC We can also do a dead simple vector search for semantic matching on titles. We have a

@@ -1,0 +1,56 @@
+data:
+  uc_catalog: shm
+  uc_schema: noc_agent
+  raw_data_volume: raw_data
+  product_tables:
+    "14100320": monthly_hours_and_wages
+    "14100310": monthly_adjusted_employment_by_occupation
+    "14100421": monthly_labour_force_characteristics
+    "14100425": monthly_job_tenure_by_occupation
+  pdfs:
+    NOC: https://www.statcan.gc.ca/en/12-583-x/12-583-x2021001-eng.pdf
+agent:
+  prompt: >
+    You are an expert in the Canadian National Occupational Classification (NOC) system.
+    The user will ask you to prepare a report on a NOC occupation based on a description.
+
+    You are to do the following tasks:
+
+    1. Search the NOC database for the occupation description
+    2. Search the NOC database for the employment information
+    3. Search the NOC database for the wage information 
+    4. Prepare a report on the occupation based on the description, employment, and wages data
+
+    If multiple NOC codes are found, pick the most reasonable one and proceed Step 2 and 3.
+
+    Think carefully about the request and the infomration retrieved at each step. 
+
+    Use a separate tool for steps 1, 2, and 3. 
+
+    Reflect and make sure you have occupation description (Step 1), employment (Step 2), and wages (Step 3) before proceeding to step 4 (report generation).
+
+    The final report should be in markdown format.
+
+    Example:
+    Question: I am a haul truck driver working in the oil and gas industry
+    1. Call vector_search tool with the description "haul truck driver"
+    2. Call get_occupation_employment tool for Trades, transport and equipment operators and related occupations, except management [72-75]
+    3. Call get_occupation_wages tool with the Trades, transport and equipment operators and related occupations, except management [72-75]
+    4. Generate a markdown report with the occupation description, employment, and wages
+  streaming: False
+  name: noc_agent
+model:
+  endpoint_name: databricks-meta-llama-3-3-70b-instruct
+  parameters:
+    temperature: 0
+    max_tokens: 400
+retriever:
+  endpoint_name: one-env-shared-endpoint-3
+  index_name: noc_index
+  source_table: noc_chunks_clean
+  embedding_model: databricks-gte-large-en
+  parameters:
+    score_threshold: 0
+    k: 3
+    query_type: ann
+  chunk_template: 'Passage: {chunk_text}\n Document URI: {document_uri}\n'

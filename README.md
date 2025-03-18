@@ -17,25 +17,21 @@ The `config.yaml` file in the root of the project contains all the information f
 
 ### Download the Data
 
-See the `download_data.py` script for more information.
+See  `01_download_data.py` for more information.
 #TODO: Automate loading the data into Databricks via Databricks Connect
 
 ### Parse the Documents
 
-See the `parse_noc_pdf.py` script for more information.
+See the `02_parse_noc_pdf.py` for more information.
 
 ### Deploy the Vector Database
 
-See the `build_vector_db.py` script for more information.
+See `03_build_vector_search.py` for more information.
 
-### Setup the Genie Space
+### Prepare our Tables and Unity Functions
 
-See the `build_genie_space.py` script for more information.
+See `04_prep_sql_functions.py` for more information.
 
 ### Build the Agent
 
-See the `build_agent.py` script for more information.
-
-### Deploy the Agent
-
-See the `deploy_agent.py` script for more information.
+See `build_agent.py` for more information.

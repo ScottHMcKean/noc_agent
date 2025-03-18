@@ -33,16 +33,17 @@ from src.noc import noc_classes
 # COMMAND ----------
 
 from mlflow.models import ModelConfig
-config = ModelConfig(development_config="../config.yaml").get('data')
-catalog = config.get('catalog')
-schema = config.get('schema')
-raw_data_volume = config.get('raw_data_volume')
+
+config = ModelConfig(development_config="../agent/config.yaml").get("data")
+catalog = config.get("uc_catalog")
+schema = config.get("uc_schema")
+raw_data_volume = config.get("raw_data_volume")
 raw_data_dir = f"/Volumes/{catalog}/{schema}/{raw_data_volume}/"
 silver_data_dir = f"/Volumes/{catalog}/{schema}/silver/"
 
 # COMMAND ----------
 
-pdf_path = next(Path(raw_data_dir).glob('12-583*.pdf'))
+pdf_path = next(Path(raw_data_dir).glob("12-583*.pdf"))
 
 # COMMAND ----------
 
@@ -76,11 +77,7 @@ result.document = clean_up_hierarchy(result.document)
 # COMMAND ----------
 
 # Chunk the document and make a dataframe
-chunker = HybridChunker(
-  chunk_size=1000, 
-  chunk_overlap=100, 
-  merge_list_items=True
-  )
+chunker = HybridChunker(chunk_size=1000, chunk_overlap=100, merge_list_items=True)
 chunks = list(chunker.chunk(result.document))
 df = pd.DataFrame([make_chunk_dict(x) for x in chunks])
 len(chunks)
