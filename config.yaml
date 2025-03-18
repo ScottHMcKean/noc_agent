@@ -11,8 +11,7 @@ data:
     NOC: https://www.statcan.gc.ca/en/12-583-x/12-583-x2021001-eng.pdf
 agent:
   streaming: False
-  experiment_location: /Users/scott.mckean/noc_agent
-  uc_model_name: shm.multimodal.noc_agent
+  model_name: noc_agent
 model:
   endpoint_name: databricks-meta-llama-3-3-70b-instruct
   parameters:
@@ -20,22 +19,10 @@ model:
     max_tokens: 400
 retriever:
   endpoint_name: one-env-shared-endpoint-3
-  index_name: shm.noc_agent.noc_index
-  source_table: shm.noc_agent.noc_chunks
+  index_name: noc_index
+  source_table: noc_chunks_clean
   embedding_model: databricks-gte-large-en
-  search_type:
-  score_threshold: 0
   parameters:
     score_threshold: 0
     k: 3
     query_type: ann
-  mapping:
-    chunk_text: enriched_text
-    document_uri: image_path
-    primary_key: id
-    other_columns:
-      - pages
-      - chunk_type
-      - filename
-      - text
-  chunk_template: 'Passage: {chunk_text}\n Document URI: {document_uri}\n'

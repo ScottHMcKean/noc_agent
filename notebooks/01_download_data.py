@@ -20,6 +20,10 @@ output_dir = f"/Volumes/{catalog}/{schema}/{raw_data_volume}/"
 
 # COMMAND ----------
 
+config
+
+# COMMAND ----------
+
 for product_id, description in product_tables.items():
   print(product_id, description)
   try:

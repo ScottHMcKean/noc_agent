@@ -2,7 +2,7 @@ backoff>=2.2.0
 databricks-agents>=0.15.0
 databricks-langchain
 databricks-sdk
-databricks-vectorsearch>=0.44
+databricks-vectorsearch>=0.52
 docling>=2.15.0
 jupyter>=1.1.1
 langchain-community>=0.3.14
