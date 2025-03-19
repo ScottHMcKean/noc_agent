@@ -46,6 +46,9 @@ class RetrieverConfig(ConfigModel):
     index_name: str
     embedding_model: str
     parameters: RetrieverParameters
+    primary_key: str
+    text_column: str
+    doc_uri: str
     chunk_template: str
 
 

@@ -1,6 +1,5 @@
 # Application configuration
-title: Semantic Legislation Search
-description: Search for legislation using semantic search with highlighting
-example: What are the regulations around taxation for the sale of liquor?
-serving_endpoint: agents_devanshu_pandey-retriever_agent_demo-elaws_retriever
-vs_index_name: devanshu_pandey.retriever_agent_demo.vs_elaws_sample
+title: NOC Agent
+description: Get your NOC classification and a report on your occupation outlook
+example: I am a haul truck driver working in the oil and gas industry, can you prepare an occupation report for the past 12 months?
+serving_endpoint: agents_shm-noc_agent-noc_agent

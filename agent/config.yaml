@@ -49,6 +49,9 @@ retriever:
   index_name: noc_index
   source_table: noc_chunks_clean
   embedding_model: databricks-gte-large-en
+  primary_key: id
+  text_column: text_w_headings
+  doc_uri: document_uri
   parameters:
     score_threshold: 0
     k: 3
