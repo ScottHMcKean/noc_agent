@@ -10,23 +10,22 @@ from src.config import parse_config
 from src.retriever import get_vector_retriever
 from src.utils import react_agent_to_chat_response
 
-from pathlib import Path
-
-mlflow_config = mlflow.models.ModelConfig(
-    development_config=str(Path(__file__).parent / "config.yaml")
-)
+mlflow_config = mlflow.models.ModelConfig(development_config="../agent/config.yaml")
 config = parse_config(mlflow_config)
 
 retriever = get_vector_retriever(config)
 model = ChatDatabricks(endpoint=config.model.endpoint_name)
 
-tools = UCFunctionToolkit(
+uc_toolkit = UCFunctionToolkit(
     function_names=[
         "shm.noc_agent.vector_search",
         "shm.noc_agent.get_occupation_employment",
         "shm.noc_agent.get_occupation_wages",
     ]
-).tools
+)
+
+tools = []
+tools.extend(uc_toolkit.tools)
 
 agent = create_react_agent(model, tools, prompt=config.agent.prompt)
 chain = agent | RunnableLambda(react_agent_to_chat_response)
