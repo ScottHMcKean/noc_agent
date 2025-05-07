@@ -1,11 +1,20 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC # NOC Agent - Download Data
+
+# COMMAND ----------
+
 # MAGIC %pip install mlflow --upgrade
 # MAGIC %restart_python
 
 # COMMAND ----------
 
-from mlflow.models import ModelConfig
+import sys
+sys.path.append('..')
 
+# COMMAND ----------
+
+from mlflow.models import ModelConfig
 from src.data import download_statcan_table
 
 # COMMAND ----------
@@ -17,10 +26,6 @@ raw_data_volume = config.get("raw_data_volume")
 pdfs = config.get("pdfs")
 product_tables = config.get("product_tables")
 output_dir = f"/Volumes/{catalog}/{schema}/{raw_data_volume}/"
-
-# COMMAND ----------
-
-config
 
 # COMMAND ----------
 
@@ -42,3 +47,14 @@ for product_id, description in product_tables.items():
     table_path = f"{catalog}.{schema}.{description}"
     file_path = f"{output_dir}{product_id}.parquet"
     spark.read.parquet(file_path).write.saveAsTable(table_path)
+
+# COMMAND ----------
+
+from pdf2image import convert_from_path
+
+# Convert PDF to images
+images = convert_from_path(pdf_path, dpi=300)
+
+# Save images
+for i, image in enumerate(images):
+    image.save(f'../data/images/{i + 1}.webp', 'WEBP')

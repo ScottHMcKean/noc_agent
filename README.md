@@ -17,12 +17,11 @@ The `config.yaml` file in the root of the project contains all the information f
 
 ### Download the Data
 
-See  `01_download_data.py` for more information.
-#TODO: Automate loading the data into Databricks via Databricks Connect
+See `01_download_data.py` for more information.
 
 ### Parse the Documents
 
-See the `02_parse_noc_pdf.py` for more information.
+See `02_parse_noc_pdf.py` for more information.
 
 ### Deploy the Vector Database
 

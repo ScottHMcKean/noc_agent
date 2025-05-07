@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Vector Search Preparation
+# MAGIC # NOC Agent - Vector Search
 
 # COMMAND ----------
 

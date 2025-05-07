@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Deploy Our React Agent
+# MAGIC # NOC Agent - Deploy Agent
 
 # COMMAND ----------
 
